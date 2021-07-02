@@ -40,7 +40,7 @@
                             	<a class="link-socail" href="#"><img src="assets/images/social-list.png" alt=""></a>
                             </div>                            
 
-							@if ($product->sale_price > 0)
+							@if ($product->sale_price > 0 && $sale->status == 1 && $sale->sale_date > Carbon\Carbon::now())
 								<div class="wrap-price"><span class="product-price" style="color:red; mar">Sale Price: ${{ $product->sale_price }}</span></div>
 								<div class="wrap-price"><span class="product-price" style="margin-bottom: 20px;">Price: <del>${{ $product->regular_price }}</del></span></div>
 							@else
@@ -60,7 +60,11 @@
 								</div>
 							</div>
 							<div class="wrap-butons">
+								@if ($product->sale_price > 0 && $sale->status == 1 && $sale->sale_date > Carbon\Carbon::now())
+									<a href="#" class="btn add-to-cart" wire:click.prevent="store('{{$product->id}}', '{{$product->name}}', '{{$product->sale_price}}')">Add to Cart</a>
+								@else
 								<a href="#" class="btn add-to-cart" wire:click.prevent="store('{{$product->id}}', '{{$product->name}}', '{{$product->regular_price}}')">Add to Cart</a>
+								@endif
                                 <div class="wrap-btn">
                                     <a href="#" class="btn btn-compare">Add Compare</a>
                                     <a href="#" class="btn btn-wishlist">Add Wishlist</a>

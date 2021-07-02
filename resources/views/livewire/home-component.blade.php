@@ -32,32 +32,34 @@
 				</div>
 			</div>
 
-			<!--On Sale-->
-			<div class="wrap-show-advance-info-box style-1 has-countdown">
-				<h3 class="title-box">On Sale</h3>
-				<div class="wrap-countdown mercado-countdown" data-expire="2020/12/12 12:34:56"></div>
-				<div class="wrap-products slide-carousel owl-carousel style-nav-1 equal-container " data-items="5" data-loop="false" data-nav="true" data-dots="false" data-responsive='{"0":{"items":"1"},"480":{"items":"2"},"768":{"items":"3"},"992":{"items":"4"},"1200":{"items":"5"}}'>
-					@foreach ($sale_products as $sale_product)
-						<div class="product product-style-2 equal-elem ">
-							<div class="product-thumnail">
-								<a href="{{ route('product.details', ['slug' => $sale_product->slug]) }}" title="{{ $sale_product->name }}">
-									<figure><img src="{{ asset('assets/images/products/') }}/{{ $sale_product->image }}" width="800" height="800" alt="T-Shirt Raw Hem Organic Boro Constrast Denim"></figure>
-								</a>
-								<div class="group-flash">
-									<span class="flash-item sale-label">sale</span>
+			@if($sale_products->count() > 0 && $sale->status == 1 && $sale->sale_date > Carbon\Carbon::now())
+				<!--On Sale-->
+				<div class="wrap-show-advance-info-box style-1 has-countdown">
+					<h3 class="title-box">On Sale</h3>
+					<div class="wrap-countdown mercado-countdown" data-expire="{{ Carbon\Carbon::parse($sale->sale_date)->format('Y/m/d h:m:s') }}"></div>
+					<div class="wrap-products slide-carousel owl-carousel style-nav-1 equal-container " data-items="5" data-loop="false" data-nav="true" data-dots="false" data-responsive='{"0":{"items":"1"},"480":{"items":"2"},"768":{"items":"3"},"992":{"items":"4"},"1200":{"items":"5"}}'>
+						@foreach ($sale_products as $sale_product)
+							<div class="product product-style-2 equal-elem ">
+								<div class="product-thumnail">
+									<a href="{{ route('product.details', ['slug' => $sale_product->slug]) }}" title="{{ $sale_product->name }}">
+										<figure><img src="{{ asset('assets/images/products/') }}/{{ $sale_product->image }}" width="800" height="800" alt="T-Shirt Raw Hem Organic Boro Constrast Denim"></figure>
+									</a>
+									<div class="group-flash">
+										<span class="flash-item sale-label">sale</span>
+									</div>
+									<div class="wrap-btn">
+										<a href="{{ route('product.details', ['slug' => $sale_product->slug]) }}" class="function-link">quick view</a>
+									</div>
 								</div>
-								<div class="wrap-btn">
-									<a href="{{ route('product.details', ['slug' => $sale_product->slug]) }}" class="function-link">quick view</a>
+								<div class="product-info">
+									<a href="{{ route('product.details', ['slug' => $sale_product->slug]) }}" class="product-name"><span>{{ $sale_product->name }}</span></a>
+									<div class="wrap-price"><span class="product-price">${{ $sale_product->sale_price }}</span></div>
 								</div>
 							</div>
-							<div class="product-info">
-								<a href="{{ route('product.details', ['slug' => $sale_product->slug]) }}" class="product-name"><span>{{ $sale_product->name }}</span></a>
-								<div class="wrap-price"><span class="product-price">${{ $sale_product->sale_price }}</span></div>
-							</div>
-						</div>
-					@endforeach					
+						@endforeach					
+					</div>
 				</div>
-			</div>
+			@endif
 
 			<!--Latest Products-->
 			<div class="wrap-show-advance-info-box style-1">

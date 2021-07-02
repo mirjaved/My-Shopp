@@ -22,6 +22,8 @@ use App\Http\livewire\admin\AdminAddHomeSliderComponent;
 use App\Http\livewire\admin\AdminEditHomeSliderComponent;
 use App\Http\livewire\admin\AdminHomeCategoryComponent;
 
+use App\Http\livewire\admin\AdminSaleComponent;
+
 use App\Http\livewire\user\UserDashboardComponent;
 
 
@@ -75,6 +77,8 @@ Route::middleware(['auth:sanctum', 'verified', 'AuthAdmin'])->group(function() {
     Route::get('/admin/slider/delete/{slide_id}', AdminEditHomeSliderComponent::class)->name('admin.deletehomeslider');
 
     Route::get('/admin/home-categories', AdminHomeCategoryComponent::class)->name('admin.homecategories');
+    Route::get('/admin/sale', AdminSaleComponent::class)->name('admin.sale');
+    
 });
 
 // For User or Customer
