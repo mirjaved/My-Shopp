@@ -17,7 +17,7 @@ class ShopComponent extends Component
 
     public function mount()
     {
-        $this->sorting = "deafult";
+        $this->sorting = "default";
         $this->pageSize = 12;
 
         $this->min_price = 1;
@@ -37,15 +37,18 @@ class ShopComponent extends Component
         $this->emitTO('wish-list-count-component', 'refreshComponent');
     } 
 
-    public function removeFromWishList($product_id)
-    {
+    public function removeFromWishList($product_id)    
+    {        
+
+        //dd(Cart::instance('wishlist')->content());
+        
         foreach(Cart::instance('wishlist')->content() as $witem)
-        {        
+        {   
             if($witem->id == $product_id)
-            {
-                Cart::instance('wishList')->remove($witem->rowId);
+            {                
+                Cart::instance('wishlist')->remove($witem->rowId);
                 $this->emitTO('wish-list-count-component', 'refreshComponent');
-                return;
+                 return;
             }
         } 
     }
