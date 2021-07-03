@@ -53,17 +53,16 @@
                             <div class="quantity">
                             	<span>Quantity:</span>
 								<div class="quantity-input">
-									<input type="text" name="product-quatity" value="1" data-max="120" pattern="[0-9]*" >
-									
-									<a class="btn btn-reduce" href="#"></a>
-									<a class="btn btn-increase" href="#"></a>
+									<input type="text" name="product-quatity" value="1" data-max="120" pattern="[0-9]*" wire:model="qty">									
+									<a class="btn btn-reduce" wire:click="decreaseQuantity"></a>
+									<a class="btn btn-increase" wire:click="increaseQuantity"></a>
 								</div>
 							</div>
 							<div class="wrap-butons">
 								@if ($product->sale_price > 0 && $sale->status == 1 && $sale->sale_date > Carbon\Carbon::now())
 									<a href="#" class="btn add-to-cart" wire:click.prevent="store('{{$product->id}}', '{{$product->name}}', '{{$product->sale_price}}')">Add to Cart</a>
 								@else
-								<a href="#" class="btn add-to-cart" wire:click.prevent="store('{{$product->id}}', '{{$product->name}}', '{{$product->regular_price}}')">Add to Cart</a>
+									<a href="#" class="btn add-to-cart" wire:click.prevent="store('{{$product->id}}', '{{$product->name}}', '{{$product->regular_price}}')">Add to Cart</a>
 								@endif
                                 <div class="wrap-btn">
                                     <a href="#" class="btn btn-compare">Add Compare</a>
