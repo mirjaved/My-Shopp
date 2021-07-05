@@ -9,49 +9,51 @@
 				</ul>
 			</div>
 			<div class=" main-content-area">
+				@if(Cart::instance('cart')->count() > 0 )
+					<div class="wrap-iten-in-cart">
 
-				<div class="wrap-iten-in-cart">
-					@if(Session::has('success_message'))
-						<div class="alert alert-success">
-							<strong>Success</strong> {{ Session::get('success_message')}}
-						</div>
-					@endif
-					@if(Cart::instance('cart')->count() > 0)
-					<h3 class="box-title">Products Name</h3>
-					<ul class="products-cart">
-						@foreach(Cart::instance('cart')->content() as $item)
-							<li class="pr-cart-item">
-								<div class="product-image">
-									<figure><img src="{{ asset('assets/images/products/') }}/{{ $item->model->image }}" alt="{{ $item->model->name }}"></figure>
-								</div>
-								<div class="product-name">
-									<a class="link-to-product" href="{{route('product.details', ['slug' => $item->model->slug])}}">{{ $item->model->name }}</a>
-								</div>
-								<div class="price-field produtc-price"><p class="price">${{ $item->model->regular_price }}</p></div>
-								<div class="quantity">
-									<div class="quantity-input">
-										<input type="text" name="product-quatity" value="{{ $item->qty }}" data-max="120" pattern="[0-9]*" >									
-										<a class="btn btn-increase" href="#" wire:click.prevent="increaseQuantity('{{$item->rowId}}')"></a>
-										<a class="btn btn-reduce" href="#" wire:click.prevent="decreaseQuantity('{{$item->rowId}}')"></a>										
-									</div>
-									<p class="text-center"><a href="#" wire:click.prevent="switchToSaveForLater('{{$item->rowId}}')">Save for Later</a></p>
-								</div>
-								<div class="price-field sub-total"><p class="price">${{ $item->subtotal }}</p></div>
-								<div class="delete">
-									<a href="#" class="btn btn-delete" title="" wire:click.prevent="destroyProduct('{{ $item->rowId }}')">
-										<span>Delete from your cart</span>
-										<i class="fa fa-times-circle" aria-hidden="true"></i>
-									</a>
-								</div>
-							</li>
-						@endforeach																
-					</ul>
-					@else 
-						<p>No item in cart.</p>
-					@endif
-				</div>
+						@if(Session::has('success_message'))
+							<div class="alert alert-success">
+								<strong>Success</strong> {{ Session::get('success_message')}}
+							</div>
+						@endif
 
-				<div class="summary">
+						@if(Cart::instance('cart')->count() > 0)
+							<h3 class="box-title">Products Name</h3>
+							<ul class="products-cart">
+								@foreach(Cart::instance('cart')->content() as $item)
+									<li class="pr-cart-item">
+										<div class="product-image">
+											<figure><img src="{{ asset('assets/images/products/') }}/{{ $item->model->image }}" alt="{{ $item->model->name }}"></figure>
+										</div>
+										<div class="product-name">
+											<a class="link-to-product" href="{{route('product.details', ['slug' => $item->model->slug])}}">{{ $item->model->name }}</a>
+										</div>
+										<div class="price-field produtc-price"><p class="price">${{ $item->model->regular_price }}</p></div>
+										<div class="quantity">
+											<div class="quantity-input">
+												<input type="text" name="product-quatity" value="{{ $item->qty }}" data-max="120" pattern="[0-9]*" >									
+												<a class="btn btn-increase" href="#" wire:click.prevent="increaseQuantity('{{$item->rowId}}')"></a>
+												<a class="btn btn-reduce" href="#" wire:click.prevent="decreaseQuantity('{{$item->rowId}}')"></a>										
+											</div>
+											<p class="text-center"><a href="#" wire:click.prevent="switchToSaveForLater('{{$item->rowId}}')">Save for Later</a></p>
+										</div>
+										<div class="price-field sub-total"><p class="price">${{ $item->subtotal }}</p></div>
+										<div class="delete">
+											<a href="#" class="btn btn-delete" title="" wire:click.prevent="destroyProduct('{{ $item->rowId }}')">
+												<span>Delete from your cart</span>
+												<i class="fa fa-times-circle" aria-hidden="true"></i>
+											</a>
+										</div>
+									</li>
+								@endforeach																
+							</ul>
+						@else 
+							<p>No item in cart.</p>
+						@endif
+					</div>
+
+					<div class="summary">
 					<div class="order-summary">
 						<h4 class="title-box">Order Summary</h4>
 						<p class="summary-info"><span class="title">Subtotal</span><b class="index">${{Cart::instance('cart')->subtotal()}}</b></p>
@@ -65,7 +67,15 @@
 							<p class="summary-info"><span class="title">Shipping</span><b class="index">Free Shipping</b></p>
 							<p class="summary-info total-info "><span class="title">Total</span><b class="index">${{Cart::instance('cart')->total()}}</b></p>
 						@endif						
+					</div>				
+				@else
+					<div class="text-center" style="padding-bottom: 30px 0;">
+						<h1>Your cart is empty!</h1>
+						<p>Add items to cart now.</p>
+						<a href="/shop" class="btn btn-primary">Shop now</a>
 					</div>
+				@endif
+					
 
 					<div class="wrap-iten-in-cart">
 						<h3 class="title-box" style="border-bottom: 1px solid; padding-bottom: 15px;">{{ Cart::instance('saveForLater')->count() }} item(s)Saved for Later</h3>
@@ -128,7 +138,8 @@
 						@if(Session::has('message'))
 							<p class="alert alert-danger">{{ Session::get('message') }}</p>
 						@endif
-						<a class="btn btn-checkout" href="checkout.html">Check out</a>
+						
+						<a class="btn btn-checkout" href="#" wire:click.prevent="checkout">Check out</a>
 						<a class="link-to-shop" href="shop.html">Continue Shopping<i class="fa fa-arrow-circle-right" aria-hidden="true"></i></a>
 					</div>					
 					<div class="update-clear">
