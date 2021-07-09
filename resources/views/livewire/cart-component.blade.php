@@ -5,7 +5,7 @@
 			<div class="wrap-breadcrumb">
 				<ul>
 					<li class="item-link"><a href="/" class="link">home</a></li>
-					<li class="item-link"><span>Cart</span></li>
+					<li class="item-link"><span>Checkout</span></li>
 				</ul>
 			</div>
 			<div class=" main-content-area">
@@ -140,7 +140,7 @@
 						@endif
 						
 						<a class="btn btn-checkout" href="#" wire:click.prevent="checkout">Check out</a>
-						<a class="link-to-shop" href="shop.html">Continue Shopping<i class="fa fa-arrow-circle-right" aria-hidden="true"></i></a>
+						<a class="link-to-shop" href="/shop">Continue Shopping<i class="fa fa-arrow-circle-right" aria-hidden="true"></i></a>
 					</div>					
 					<div class="update-clear">
 						<a class="btn btn-clear" href="#" wire:click.prevent="destroyAll()">Clear Shopping Cart</a>

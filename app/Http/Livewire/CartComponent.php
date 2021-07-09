@@ -114,7 +114,7 @@ class CartComponent extends Component
     public function checkout()
     {
         if(Auth::check())
-        {
+        {            
             return redirect()->route('checkout');
         }
         else 
@@ -125,6 +125,12 @@ class CartComponent extends Component
 
     public function setAmountForCheckout()
     {
+        if(!Cart::instance('cart')->count() > 0)
+        {
+            session()->forget('checkout');
+            return;
+        }
+
         if(session()->has('coupon'))
         {
             session()->put('coupon', [

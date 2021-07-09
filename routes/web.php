@@ -8,29 +8,25 @@ use App\Http\livewire\DetailsComponent;
 use App\Http\livewire\CategoryComponent;
 use App\Http\livewire\SearchComponent;
 use App\Http\livewire\WishlistComponent;
+use App\Http\livewire\ThankyouComponent;
 
 use App\Http\livewire\admin\AdminDashboardComponent;
 use App\Http\livewire\admin\AdminCategoryComponent;
 use App\Http\livewire\admin\AdminAddCategoryComponent;
 use App\Http\livewire\admin\AdminEditCategoryComponent;
-
 use App\Http\livewire\admin\AdminProductComponent;
 use App\Http\livewire\admin\AdminAddProductComponent;
 use App\Http\livewire\admin\AdminEditProductComponent;
-
 use App\Http\livewire\admin\AdminHomeSliderComponent;
 use App\Http\livewire\admin\AdminAddHomeSliderComponent;
 use App\Http\livewire\admin\AdminEditHomeSliderComponent;
 use App\Http\livewire\admin\AdminHomeCategoryComponent;
-
 use App\Http\livewire\admin\AdminCouponsComponent;
 use App\Http\livewire\admin\AdminAddCouponsComponent;
 use App\Http\livewire\admin\AdminEditCouponsComponent;
-
 use App\Http\livewire\admin\AdminSaleComponent;
+
 use App\Http\livewire\user\UserDashboardComponent;
-
-
 
 use Illuminate\Support\Facades\Route;
 
@@ -60,6 +56,8 @@ Route::get('/product-category/{category_slug}', CategoryComponent::class)->name(
 Route::get('/search', SearchComponent::class)->name('product.search');
 
 Route::get('/wishlist', WishlistComponent::class)->name('product.wishlist');
+
+Route::get('/thank-you', ThankyouComponent::class)->name('thankyou');
 
 // Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
 //     return view('dashboard');
