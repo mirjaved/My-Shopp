@@ -10,6 +10,7 @@ use App\Models\Shipping;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 
+use Stripe;
 use Cart;
 
 class CheckoutComponent extends Component
@@ -40,6 +41,11 @@ class CheckoutComponent extends Component
     public $paymentMode;
     public $thankyou;
 
+    public $card_no;
+    public $exp_month;
+    public $exp_year;
+    public $cvc;
+
     public function updated($fields)
     {
         $this->validateOnly($fields, [
@@ -69,6 +75,16 @@ class CheckoutComponent extends Component
                 's_zipcode' => 'required',
             ]);
         }
+
+        if($this->paymentMode == 'card')
+        {
+            $this->validateOnly($fields, [
+                'card_no' => 'required|numeric',
+                'exp_month' => 'required|numeric',
+                'exp_year' => 'required|numeric', 
+                'cvc' => 'required|numeric' 
+            ]);
+        }
     }    
 
     public function placeOrder()
@@ -85,6 +101,16 @@ class CheckoutComponent extends Component
             'zipcode' => 'required',
             'paymentMode' => 'required'
         ]);
+
+        if($this->paymentMode == 'card')
+        {
+            $this->validate([
+                'card_no' => 'required|numeric',
+                'exp_month' => 'required|numeric',
+                'exp_year' => 'required|numeric', 
+                'cvc' => 'required|numeric'
+            ]);
+        }
 
         $order = new Order();
         $order->user_id = Auth::user()->id;
@@ -147,18 +173,93 @@ class CheckoutComponent extends Component
         }        
 
         if($this->paymentMode == 'cod')
-        {            
-            $transcation = new Transaction();
-            $transcation->user_id = Auth::user()->id;
-            $transcation->order_id = $order->id;
-            $transcation->mode = 'cod';
-            $transcation->status = 'pending';
-            $transcation->save();
+        {
+            $this->makeTransaction($order->id, 'pending');
+            $this->resetCart();
         }
+        else if ($this->paymentMode == 'card')
+        {
+            $stripe = Stripe::make(env('STRIPE_KEY'));
+            
+            try{
+                $token = $stripe->tokens()->create([
+                    'card' => [
+                        'number' => $this->card_no,
+                        'exp_month' => $this->exp_month,
+                        'exp_year' => $this->exp_year,
+                        'cvc' => $this->cvc,
+                    ]
+                ]);
+                if(!isset($token['id']))
+                {
+                    session()->flash('stripe_error', 'The stripe token was not generated correctly!');
+                    $this->thankyou = 0;
+                }
 
+                $customer = $stripe->customer()->create([
+                    'name' => $this->firstname . ' ' . $this->lastname,
+                    'email' => $this->email,
+                    'phone' => $this->mobile,
+                    'address' => [
+                        'line1' => $this->line1,
+                        'postal_code' => $this->zipcode,
+                        'city' => $this->city,
+                        'state' => $this->province,
+                        'country' => $this->country,
+                    ],
+                    'shipping' => [
+                        'name' => $this->firstname . ' ' . $this->lastname,
+                        'address' => [
+                            'line1' => $this->line1,
+                            'postal_code' => $this->zipcode,
+                            'city' => $this->city,
+                            'state' => $this->province,
+                            'country' => $this->country,
+                        ],
+                        'source' => $token['id']
+                    ]
+                ]);
+
+                $charge = $stripe->charges()->create([
+                    'customer' => $customer['id'],
+                    'curretncy' => 'USD',
+                    'amount' => session()->get('checkout')['total'],
+                    'description' => 'Payment for order no ' . $order->id
+                ]);
+
+                if($charge['status' == 'succeeded'])
+                {
+                    $this->makeTransaction($order->id, 'approved');
+                    $this->resetCart();
+                }
+                else
+                {
+                    session()->flash('stripe_error', 'Error in transcation!');
+                    $this->thankyou = 0;
+                }
+            } catch(Exception $e)
+            {
+                session()->flash('stripe_error', $e->getMessage());
+                $this->thankyou = 0;
+            }
+        }
+    }
+
+    public function resetCart()
+    {
         $this->thankyou = 1;
         Cart::instance('cart')->destroy();
         session()->forget('checkout');
+    }
+
+    public function makeTransaction($order_id, $status)
+    {
+        $transcation = new Transaction();
+        $transcation->user_id = Auth::user()->id;
+        $transcation->order_id = $order_id;
+        $transcation->mode = $this->paymentMode;
+        $transcation->status = $status;
+        $transcation->save();
     }
 
     public function varifyForCheckout()
@@ -174,7 +275,7 @@ class CheckoutComponent extends Component
         else if(!session()->get('checkout'))
         {
             return redirect()->route('product.cart');
-        }
+        }   
     }
     
     public function render()
