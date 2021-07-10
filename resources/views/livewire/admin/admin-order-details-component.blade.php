@@ -1,10 +1,9 @@
 <div>
     <div class="container" style="padding: 30px 0;">
-
         <div class="row">
             <div class="col-md-12">
                 <div class="panel panel-default">
-                    <div class="panel-heading">
+                <div class="panel-heading">
                         <div class="row">
                             <div class="col-md-6">
                                 <h4>Order Details</h4>
@@ -12,6 +11,39 @@
                             <div class="col-md-6">
                                 <a href="{{ route('admin.orders') }}" class="btn btn-success pull-right">All Orders</a>
                             </div>
+                            <div class="panle-body">
+                                <table class="table">
+                                    <tr>
+                                        <th>Order Id</th>
+                                        <td>{{ $order->id }}</td>
+                                        <th>Order Date</th>
+                                        <td>{{ $order->created_at }}</td>
+                                        <th>Order Status</th>
+                                        <td>{{ $order->status }}</td>
+                                        @if($order->status == 'delivered')
+                                            <th>Delivery Date</th>
+                                            <td>{{ $order->delivered_date }}</td>
+                                        @elseif($order->status == 'canceled')
+                                            <th>Cancellation Date</th>
+                                            <td>{{ $order->canceled_date }}</td>
+                                        @endif
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h4>Order Details</h4>
+                            </div>                            
                         </div>
                     </div>
                     <div class="panel-body">
