@@ -29,6 +29,8 @@ use App\Http\livewire\admin\AdminOrderComponent;
 use App\Http\livewire\admin\AdminOrderDetailsComponent;
 
 use App\Http\livewire\user\UserDashboardComponent;
+use App\Http\livewire\user\UserOrderComponent;
+use App\Http\livewire\user\UserOrderDetailsComponent;
 
 use Illuminate\Support\Facades\Route;
 
@@ -103,4 +105,7 @@ Route::middleware(['auth:sanctum', 'verified', 'AuthAdmin'])->group(function() {
 // For User or Customer
 Route::middleware(['auth:sanctum', 'verified', ])->group(function() {
     Route::get('/user/dashboard', UserDashboardComponent::class)->name('user.dashboard');
+
+    Route::get('/user/orders', UserOrderComponent::class)->name('user.orders');
+    Route::get('/user/order/{order_id}', UserOrderDetailsComponent::class)->name('user.orderdetails');
 });
