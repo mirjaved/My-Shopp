@@ -2,7 +2,7 @@
 
 namespace App\Http\Livewire\Admin;
 
-use App\Models\Orders;
+use App\Models\Order;
 use Livewire\Component;
 
 class AdminOrderComponent extends Component
