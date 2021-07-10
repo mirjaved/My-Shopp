@@ -7231,3 +7231,31 @@ svg {
 .header-icons {
     color: #ff7007 !important;
 }
+
+.color-gray {
+    color: #e6e6e6 !important;
+}
+
+.width-0-percent {
+    width: 0%;
+}
+
+.width-20-percent {
+    width: 20%;
+}
+
+.width-40-percent {
+    width: 40%;
+}
+
+.width-60-percent {
+    width: 60%;
+}
+
+.width-80-percent {
+    width: 80%;
+}
+
+.width-100-percent {
+    width: 100%;
+}
