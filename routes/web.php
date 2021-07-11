@@ -67,6 +67,8 @@ Route::get('/wishlist', WishlistComponent::class)->name('product.wishlist');
 
 Route::get('/thank-you', ThankyouComponent::class)->name('thankyou');
 
+Route::view('/about-us', 'about-us');
+
 Route::get('/contact-us', ContactComponent::class)->name('contact');
 
 // Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
