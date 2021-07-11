@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire;
 
+use App\Models\Setting;
 use App\Models\Contact;
 use Livewire\Component;
 
@@ -52,6 +53,7 @@ class ContactComponent extends Component
 
     public function render()
     {
-        return view('livewire.contact-component')->layout('layouts.index');
+        $setting = Setting::find(1);
+        return view('livewire.contact-component', ['setting' => $setting])->layout('layouts.index');
     }
 }
